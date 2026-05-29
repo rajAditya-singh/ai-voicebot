@@ -1,14 +1,10 @@
-import Orb from "./components/Orb";
-import "./styles/Orb.css";
-
 import { useRef, useState } from "react";
 import axios from "axios";
-
 import "./App.css";
 
 function App() {
   const [messages, setMessages] = useState([]);
-
+  const [hasStarted, setHasStarted] = useState(false);
   const [isListening, setIsListening] = useState(false);
 
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -40,10 +36,7 @@ function App() {
       setIsSpeaking(true);
 
       // START BACKGROUND LISTENING
-      if (
-        recognitionRef.current &&
-        !recognitionActiveRef.current
-      ) {
+      if (recognitionRef.current && !recognitionActiveRef.current) {
         try {
           recognitionRef.current.start();
 
@@ -59,11 +52,8 @@ function App() {
     speech.onend = () => {
       setIsSpeaking(false);
 
-      // CONTINUE LISTENING
-      if (
-        isConversationActive.current &&
-        !recognitionActiveRef.current
-      ) {
+      // CONTINUE LISTENING AFTER AI FINISHES
+      if (isConversationActive.current && !recognitionActiveRef.current) {
         setTimeout(() => {
           startListening();
         }, 500);
@@ -82,11 +72,9 @@ function App() {
     if (recognitionActiveRef.current) return;
 
     if (!recognitionRef.current) {
-      recognitionRef.current =
-        new window.webkitSpeechRecognition();
+      recognitionRef.current = new window.webkitSpeechRecognition();
 
-      // IMPORTANT FIX
-      recognitionRef.current.continuous = true;
+      recognitionRef.current.continuous = false;
 
       recognitionRef.current.interimResults = false;
 
@@ -112,18 +100,14 @@ function App() {
     // =========================
 
     recognition.onresult = async (event) => {
-      // USER INTERRUPTS AI
+      // USER INTERRUPTED AI
       window.speechSynthesis.cancel();
 
       setIsSpeaking(false);
 
-      recognitionActiveRef.current = false;
+      const transcript = event.results[0][0].transcript;
 
-      setIsListening(false);
-
-      const transcript =
-        event.results[event.results.length - 1][0]
-          .transcript;
+      recognition.stop();
 
       // ADD USER MESSAGE
       setMessages((prev) => [
@@ -135,12 +119,9 @@ function App() {
       ]);
 
       try {
-        const response = await axios.post(
-          "http://localhost:5000/chat",
-          {
-            message: transcript,
-          }
-        );
+        const response = await axios.post("http://localhost:5000/chat", {
+          message: transcript,
+        });
 
         // ADD AI MESSAGE
         setMessages((prev) => [
@@ -169,15 +150,11 @@ function App() {
 
       setIsListening(false);
 
-      // IGNORE NO SPEECH
-      if (event.error === "no-speech") {
-        if (isConversationActive.current) {
-          setTimeout(() => {
-            startListening();
-          }, 1000);
-        }
-
-        return;
+      // AUTO RESTART
+      if (isConversationActive.current && event.error === "no-speech") {
+        setTimeout(() => {
+          startListening();
+        }, 1000);
       }
     };
 
@@ -192,11 +169,10 @@ function App() {
 
       setIsListening(false);
 
-      // AUTO RESTART
-      if (
-        isConversationActive.current &&
-        !window.speechSynthesis.speaking
-      ) {
+      // RESTART ONLY IF:
+      // conversation active
+      // AI NOT SPEAKING
+      if (isConversationActive.current && !window.speechSynthesis.speaking) {
         setTimeout(() => {
           startListening();
         }, 500);
@@ -209,13 +185,14 @@ function App() {
   // =========================
 
   const startConversation = () => {
+    setHasStarted(true);
     isConversationActive.current = true;
 
     startListening();
   };
 
   // =========================
-  // STOP CONVERSATION
+  // STOP EVERYTHING
   // =========================
 
   const stopConversation = () => {
@@ -239,107 +216,162 @@ function App() {
   // =========================
 
   return (
-    <div className="app-container">
+  <div className="app">
 
-      {/* BACKGROUND */}
+    {/* TOP BAR */}
 
-      <div className="background-glow"></div>
+    <div className="topbar">
 
-      {/* CENTER AREA */}
+      <div className="brand">
 
-      <div className="center-area">
+        <div className="brand-dot"></div>
 
-        {/* ORB */}
+        <div>
 
-        <div
-          className={`orb-wrapper ${
-            isListening
-              ? "listening"
-              : isSpeaking
-              ? "speaking"
-              : ""
-          }`}
-        >
-          <Orb
-            isListening={isListening}
-            isSpeaking={isSpeaking}
-          />
-        </div>
-
-        {/* TITLE */}
-
-        <div className="hero-text">
-          <h1>Aditya AI</h1>
+          <h1>
+            Talk with Aditya AI
+          </h1>
 
           <p>
-            Your personal AI voice assistant
+            Personal AI Voice Assistant
           </p>
+
         </div>
 
-        {/* STATUS */}
-
-        <p className="status-text">
-          {isListening
-            ? "Listening..."
-            : isSpeaking
-            ? "Speaking..."
-            : "Tap the mic and start talking"}
-        </p>
-
-        {/* MIC BUTTON */}
-
-        <button
-          className={`mic-button ${
-            isListening || isSpeaking
-              ? "active"
-              : ""
-          }`}
-          onClick={() => {
-            if (
-              isListening ||
-              isSpeaking
-            ) {
-              stopConversation();
-            } else {
-              startConversation();
-            }
-          }}
-        >
-          {isListening || isSpeaking
-            ? "✕"
-            : "🎤"}
-        </button>
       </div>
 
-      {/* CHAT */}
+      <div className="status-pill">
 
-      <div className="messages-container">
+        {isListening &&
+          "🎤 Listening"}
 
-        {messages.map((msg, index) => (
-          <div
-            key={index}
-            className={`message-row ${
-              msg.sender === "user"
-                ? "user-row"
-                : "ai-row"
-            }`}
-          >
-            <div
-              className={`message-bubble ${
-                msg.sender === "user"
-                  ? "user-message"
-                  : "ai-message"
-              }`}
-            >
-              <p>{msg.text}</p>
-            </div>
-          </div>
-        ))}
+        {isSpeaking &&
+          "🗣 Speaking"}
+
+        {!isListening &&
+          !isSpeaking &&
+          "⚡ Ready"}
 
       </div>
 
     </div>
-  );
+
+    {/* HERO */}
+
+    <div
+      className={`hero-section ${
+        hasStarted
+          ? "hero-started"
+          : ""
+      }`}
+    >
+
+      <h2
+        className={`hero-title ${
+          hasStarted
+            ? "hero-hidden"
+            : ""
+        }`}
+      >
+        Meet Aditya through AI
+      </h2>
+
+      <p
+        className={`hero-subtitle ${
+          hasStarted
+            ? "hero-hidden"
+            : ""
+        }`}
+      >
+
+        Ask me about AI,
+        projects,
+        debugging,
+        mindset,
+        growth,
+        or career journey.
+
+      </p>
+
+      {/* BUTTON */}
+
+      {!isConversationActive.current ? (
+
+        <button
+          className={`hero-btn ${
+            hasStarted
+              ? "move-down"
+              : ""
+          }`}
+          onClick={startConversation}
+        >
+          🎤 Start Conversation
+        </button>
+
+      ) : (
+
+        <button
+          className="voice-btn stop move-down"
+          onClick={stopConversation}
+        >
+          🛑 End Conversation
+        </button>
+
+      )}
+
+    </div>
+
+    {/* CHAT */}
+
+    <div
+      className={`chat-wrapper ${
+        hasStarted
+          ? "chat-visible"
+          : ""
+      }`}
+    >
+
+      {messages.map((msg, index) => (
+
+        <div
+          key={index}
+          className={`chat-row ${
+            msg.sender === "user"
+              ? "user-row"
+              : "ai-row"
+          }`}
+        >
+
+          <div
+            className={`chat-bubble ${
+              msg.sender === "user"
+                ? "user-bubble"
+                : "ai-bubble"
+            }`}
+          >
+
+            <div className="chat-role">
+
+              {msg.sender === "user"
+                ? "You"
+                : "Aditya AI"}
+
+            </div>
+
+            <div className="chat-text">
+              {msg.text}
+            </div>
+
+          </div>
+
+        </div>
+
+      ))}
+
+    </div>
+
+  </div>
+);
 }
 
 export default App;
