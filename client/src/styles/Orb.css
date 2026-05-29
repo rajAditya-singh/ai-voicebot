@@ -1,0 +1,118 @@
+.orb-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.orb {
+    width: 240px;
+    height: 240px;
+    border-radius: 50%;
+
+    background: radial-gradient(circle at 30% 30%,
+            #ffffff,
+            #f0abfc 15%,
+            #c084fc 35%,
+            #9333ea 60%,
+            #4c1d95 100%);
+
+    position: relative;
+
+    box-shadow:
+        0 0 40px rgba(192, 132, 252, 0.8),
+        0 0 80px rgba(168, 85, 247, 0.7),
+        0 0 140px rgba(147, 51, 234, 0.6),
+        inset 0 0 30px rgba(255, 255, 255, 0.2);
+
+    animation: floatOrb 5s ease-in-out infinite;
+}
+
+.listening .orb {
+    animation:
+        listeningPulse 1s infinite,
+        floatOrb 5s ease-in-out infinite;
+}
+
+.speaking .orb {
+    animation:
+        speakingPulse 0.45s infinite alternate,
+        floatOrb 5s ease-in-out infinite;
+}
+
+@keyframes pulseListening {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.08);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes pulseSpeaking {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.12);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes floating {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-12px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+@keyframes listeningPulse {
+
+    0% {
+        transform: scale(1);
+        box-shadow:
+            0 0 40px rgba(192, 132, 252, 0.7),
+            0 0 80px rgba(168, 85, 247, 0.5);
+    }
+
+    50% {
+        transform: scale(1.08);
+
+        box-shadow:
+            0 0 60px rgba(192, 132, 252, 1),
+            0 0 120px rgba(168, 85, 247, 1),
+            0 0 180px rgba(147, 51, 234, 0.8);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes speakingPulse {
+
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.12);
+    }
+}
