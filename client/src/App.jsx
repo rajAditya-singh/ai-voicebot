@@ -119,7 +119,7 @@ function App() {
       ]);
 
       try {
-        const response = await axios.post("http://localhost:5000/chat", {
+        const response = await axios.post("https://ai-voicebot-8tu1.onrender.com/chat", {
           message: transcript,
         });
 
