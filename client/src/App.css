@@ -5,7 +5,7 @@
 }
 
 body {
-  background: #0f172a;
+  background: #070b1a;
   color: white;
   font-family: Inter, sans-serif;
   overflow: hidden;
@@ -20,18 +20,27 @@ body {
   background:
     radial-gradient(
       circle at top left,
-      rgba(37,99,235,0.18),
+      rgba(37, 99, 235, 0.18),
       transparent 30%
     ),
     radial-gradient(
       circle at bottom right,
-      rgba(124,58,237,0.16),
+      rgba(124, 58, 237, 0.18),
       transparent 30%
     ),
-    #0f172a;
+    radial-gradient(
+      circle at center,
+      rgba(168, 85, 247, 0.08),
+      transparent 45%
+    ),
+    #070b1a;
+
+  position: relative;
 }
 
-/* TOPBAR */
+/* =========================
+   TOPBAR
+========================= */
 
 .topbar {
   height: 80px;
@@ -42,9 +51,7 @@ body {
 
   padding: 0 28px;
 
-  border-bottom:
-    1px solid
-    rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 
   backdrop-filter: blur(20px);
 
@@ -64,21 +71,16 @@ body {
 
   border-radius: 50%;
 
-  background:
-    linear-gradient(
-      135deg,
-      #2563eb,
-      #7c3aed
-    );
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
 
-  box-shadow:
-    0 0 20px
-    rgba(124,58,237,0.8);
+  box-shadow: 0 0 24px rgba(139, 92, 246, 0.9);
 }
 
 .brand h1 {
   font-size: 20px;
   font-weight: 700;
+
+  letter-spacing: -0.5px;
 }
 
 .brand p {
@@ -92,18 +94,20 @@ body {
 
   border-radius: 999px;
 
-  background:
-    rgba(255,255,255,0.06);
+  background: rgba(255, 255, 255, 0.05);
 
-  border:
-    1px solid
-    rgba(255,255,255,0.08);
+  border: 1px solid rgba(255, 255, 255, 0.07);
 
   font-size: 14px;
+
   color: #e2e8f0;
+
+  backdrop-filter: blur(20px);
 }
 
-/* HERO */
+/* =========================
+   HERO
+========================= */
 
 .hero-section {
   flex: 1;
@@ -118,295 +122,114 @@ body {
 
   position: relative;
 
-  transition:
-    all 0.8s ease;
-
   z-index: 5;
 }
 
 .hero-started {
   justify-content: flex-start;
 
-  padding-top: 30px;
+  padding-top: 20px;
 }
 
-/* HERO TITLE */
+/* =========================
+   TITLE
+========================= */
 
 .hero-title {
-  font-size: 68px;
+  font-size: 84px;
 
-  margin-bottom: 20px;
+  font-weight: 800;
 
-  line-height: 1.1;
+  line-height: 1;
 
-  background:
-    linear-gradient(
-      90deg,
-      white,
-      #94a3b8
-    );
+  letter-spacing: -4px;
+
+  margin-bottom: 24px;
+
+  background: linear-gradient(135deg, #ffffff, #c4b5fd, #60a5fa);
+
+  background-size: 200% 200%;
 
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 
   animation:
-    fadeIn 0.8s ease;
-
-  transition:
-    opacity 0.7s ease,
-    transform 0.7s ease;
+    gradientMove 6s ease infinite,
+    fadeInUp 0.8s ease;
 }
-
-/* HERO SUBTITLE */
 
 .hero-subtitle {
   max-width: 760px;
 
   color: #94a3b8;
 
-  font-size: 20px;
+  font-size: 21px;
 
-  line-height: 1.7;
+  line-height: 1.8;
 
-  margin-bottom: 42px;
+  margin-bottom: 60px;
 
-  animation:
-    fadeIn 1s ease;
+  animation: fadeInUp 1s ease;
 
-  transition:
-    opacity 0.7s ease,
-    transform 0.7s ease;
+  opacity: 0.92;
 }
 
-/* HERO FADE */
+/* =========================
+   HERO HIDE
+========================= */
 
 .hero-hidden {
   opacity: 0;
 
-  transform:
-    translateY(-30px)
-    scale(0.96);
-
-  pointer-events: none;
-}
-
-/* BUTTONS */
-
-
-
-
-
-
-
-
-
-/* BUTTON MOVEMENT */
-
-.move-down {
-  position: fixed;
-
-  bottom: 28px;
-
-  left: 50%;
-
-  transform:
-    translateX(-50%);
-
-  z-index: 100;
-}
-
-/* CHAT */
-
-.chat-wrapper {
-  flex: 1;
-
-  overflow-y: auto;
-
-  padding:
-    20px
-    24px
-    120px;
-
-  display: flex;
-  flex-direction: column;
-
-  gap: 22px;
-
-  max-width: 1000px;
-
-  width: 100%;
-
-  margin: auto;
-
-  opacity: 0;
-
-  transform:
-    translateY(30px);
+  transform: translateY(-28px) scale(0.96);
 
   pointer-events: none;
 
   transition:
-    all 0.8s ease;
-}
-
-.chat-visible {
-  opacity: 1;
-
-  transform:
-    translateY(0);
-
-  pointer-events: auto;
-}
-
-.chat-wrapper::-webkit-scrollbar {
-  width: 6px;
-}
-
-.chat-wrapper::-webkit-scrollbar-thumb {
-  background:
-    rgba(255,255,255,0.1);
-
-  border-radius: 999px;
-}
-
-/* CHAT ROWS */
-
-.chat-row {
-  display: flex;
-}
-
-.user-row {
-  justify-content: flex-end;
-}
-
-.ai-row {
-  justify-content: flex-start;
-}
-
-/* CHAT BUBBLES */
-
-.chat-bubble {
-  max-width: 78%;
-
-  padding: 18px 20px;
-
-  border-radius: 24px;
-
-  animation:
-    fadeUp 0.25s ease;
-
-  backdrop-filter: blur(20px);
-}
-
-.user-bubble {
-  background:
-    linear-gradient(
-      135deg,
-      #2563eb,
-      #1d4ed8
-    );
-
-  box-shadow:
-    0 10px 30px
-    rgba(37,99,235,0.25);
-}
-
-.ai-bubble {
-  background:
-    rgba(255,255,255,0.05);
-
-  border:
-    1px solid
-    rgba(255,255,255,0.06);
-}
-
-.chat-role {
-  font-size: 13px;
-
-  opacity: 0.7;
-
-  margin-bottom: 10px;
-}
-
-.chat-text {
-  font-size: 16px;
-
-  line-height: 1.8;
-
-  color: #f8fafc;
-}
-
-/* ANIMATIONS */
-
-@keyframes fadeUp {
-
-  from {
-    opacity: 0;
-    transform:
-      translateY(12px);
-  }
-
-  to {
-    opacity: 1;
-    transform:
-      translateY(0);
-  }
-}
-
-@keyframes fadeIn {
-
-  from {
-    opacity: 0;
-    transform:
-      translateY(18px);
-  }
-
-  to {
-    opacity: 1;
-    transform:
-      translateY(0);
-  }
-}
-
-/* MOBILE */
-
-@media (max-width: 768px) {
-
-  .hero-title {
-    font-size: 42px;
-  }
-
-  .hero-subtitle {
-    font-size: 17px;
-    padding: 0 10px;
-  }
-
-  .chat-bubble {
-    max-width: 92%;
-  }
-
-  .topbar {
-    padding: 0 18px;
-  }
+    opacity 0.45s ease,
+    transform 0.45s ease;
 }
 
 /* =========================
-   VOICE BUTTON
+   BUTTON POSITION
+========================= */
+
+.move-down {
+  top: auto !important;
+
+  bottom: 35px !important;
+
+  left: 50% !important;
+
+  transform: translateX(-50%) !important;
+}
+
+/* =========================
+   VOICE CONTAINER
 ========================= */
 
 .voice-container {
-  position: relative;
+  position: fixed;
+
+  left: 50%;
+
+  top: 58%;
+
+  transform: translate(-50%, -50%);
+
+  z-index: 1000;
 
   display: flex;
+
   align-items: center;
+
   justify-content: center;
 
-  width: 180px;
-  height: 100px;
+  width: 260px;
+
+  height: 120px;
 
   cursor: pointer;
-
-  z-index: 50;
 }
 
 /* =========================
@@ -414,8 +237,8 @@ body {
 ========================= */
 
 .mic-button {
-  width: 82px;
-  height: 82px;
+  width: 88px;
+  height: 88px;
 
   border-radius: 50%;
 
@@ -425,38 +248,39 @@ body {
 
   position: relative;
 
-  background:
-    radial-gradient(
-      circle at top,
-      #7c3aed,
-      #2563eb
-    );
+  background: linear-gradient(135deg, #7c3aed, #2563eb);
 
   box-shadow:
-    0 0 60px rgba(124,58,237,0.6),
-    0 0 120px rgba(37,99,235,0.25);
+    0 0 50px rgba(124, 58, 237, 0.6),
+    0 0 120px rgba(37, 99, 235, 0.25);
 
-  animation:
-    pulseGlow 2.5s infinite ease-in-out;
+  animation: micFloat 3s ease-in-out infinite;
 }
+
+.mic-button svg {
+  position: relative;
+  z-index: 3;
+}
+
+/* =========================
+   MIC GLOW
+========================= */
 
 .mic-glow {
   position: absolute;
 
-  width: 140px;
-  height: 140px;
+  width: 150px;
+  height: 150px;
 
   border-radius: 50%;
 
-  background:
-    radial-gradient(
-      circle,
-      rgba(124,58,237,0.28),
-      transparent 70%
-    );
+  background: radial-gradient(
+    circle,
+    rgba(124, 58, 237, 0.28),
+    transparent 70%
+  );
 
-  animation:
-    glowWave 3s infinite ease;
+  animation: glowWave 3s infinite ease;
 }
 
 /* =========================
@@ -468,7 +292,7 @@ body {
   align-items: center;
   justify-content: center;
 
-  width: 220px;
+  width: 260px;
   height: 100px;
 }
 
@@ -476,27 +300,23 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+
   gap: 10px;
 }
 
 .voice-wave span {
-  width: 8px;
-  height: 20px;
+  width: 9px;
+
+  height: 16px;
 
   border-radius: 999px;
 
-  background:
-    linear-gradient(
-      180deg,
-      #8b5cf6,
-      #2563eb
-    );
+  background: linear-gradient(180deg, #8b5cf6, #22d3ee);
 
-  box-shadow:
-    0 0 20px rgba(124,58,237,0.6);
-
-  transition: none;
+  box-shadow: 0 0 18px rgba(124, 58, 237, 0.7);
 }
+
+/* ACTIVE */
 
 .voice-wave.active span:nth-child(1) {
   animation: wave 0.9s infinite ease-in-out;
@@ -519,44 +339,156 @@ body {
 }
 
 /* =========================
+   CHAT
+========================= */
+
+.chat-wrapper {
+  flex: 1;
+
+  overflow-y: auto;
+
+  padding: 20px 24px 120px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 24px;
+
+  max-width: 1000px;
+
+  width: 100%;
+
+  margin: auto;
+
+  opacity: 0;
+
+  transform: translateY(30px);
+
+  pointer-events: none;
+
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+}
+
+.chat-visible {
+  opacity: 1;
+
+  transform: translateY(0);
+
+  pointer-events: auto;
+}
+
+.chat-wrapper::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+
+  border-radius: 999px;
+}
+
+/* =========================
+   CHAT ROWS
+========================= */
+
+.chat-row {
+  display: flex;
+}
+
+.user-row {
+  justify-content: flex-end;
+}
+
+.ai-row {
+  justify-content: flex-start;
+}
+
+/* =========================
+   CHAT BUBBLES
+========================= */
+
+.chat-bubble {
+  max-width: 78%;
+
+  padding: 20px 22px;
+
+  border-radius: 28px;
+
+  animation: fadeUp 0.28s ease;
+
+  backdrop-filter: blur(24px);
+}
+
+.user-bubble {
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+
+  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.2);
+}
+
+.ai-bubble {
+  background: rgba(255, 255, 255, 0.05);
+
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.chat-role {
+  font-size: 13px;
+
+  opacity: 0.65;
+
+  margin-bottom: 10px;
+}
+
+.chat-text {
+  font-size: 16px;
+
+  line-height: 1.8;
+
+  color: #f8fafc;
+}
+
+/* =========================
    ANIMATIONS
 ========================= */
 
 @keyframes wave {
   0% {
-    height: 12px;
-    opacity: 0.5;
+    height: 14px;
+    opacity: 0.45;
+    transform: translateY(0);
   }
 
-  50% {
-    height: 70px;
+  25% {
+    height: 58px;
     opacity: 1;
-  }
-
-  100% {
-    height: 12px;
-    opacity: 0.5;
-  }
-}
-
-@keyframes pulseGlow {
-  0% {
-    transform: scale(1);
+    transform: translateY(-4px);
   }
 
   50% {
-    transform: scale(1.08);
+    height: 28px;
+    opacity: 0.8;
+    transform: translateY(0);
+  }
+
+  75% {
+    height: 76px;
+    opacity: 1;
+    transform: translateY(4px);
   }
 
   100% {
-    transform: scale(1);
+    height: 14px;
+    opacity: 0.45;
+    transform: translateY(0);
   }
 }
 
 @keyframes glowWave {
   0% {
     transform: scale(0.9);
-    opacity: 0.4;
+    opacity: 0.35;
   }
 
   50% {
@@ -566,6 +498,97 @@ body {
 
   100% {
     transform: scale(0.9);
-    opacity: 0.4;
+    opacity: 0.35;
+  }
+}
+
+@keyframes micFloat {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 48px;
+
+    letter-spacing: -2px;
+  }
+
+  .hero-subtitle {
+    font-size: 17px;
+
+    padding: 0 12px;
+  }
+
+  .chat-bubble {
+    max-width: 92%;
+  }
+
+  .topbar {
+    padding: 0 18px;
+  }
+
+  .voice-wave-wrapper {
+    width: 210px;
+  }
+
+  .mic-button {
+    width: 78px;
+    height: 78px;
   }
 }
