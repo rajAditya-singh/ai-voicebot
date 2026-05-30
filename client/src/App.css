@@ -8,7 +8,8 @@ body {
   background: #070b1a;
   color: white;
   font-family: Inter, sans-serif;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .app {
@@ -592,3 +593,4 @@ body {
     height: 78px;
   }
 }
+
