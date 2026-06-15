@@ -17,6 +17,8 @@ app.get("/", (req, res) => {
     res.send("AI Voicebot Backend Running");
 });
 
+let conversationHistory = [];
+
 app.post("/chat", async (req, res) => {
     try {
         const { message } = req.body;
@@ -42,16 +44,23 @@ Your personality:
 - Curious about AI and technology
 
 Important behavior rules:
-- Keep answers SHORT and natural.
-- Usually answer in 3-6 lines only.
-- Speak casually and conversationally.
-- Do NOT sound like ChatGPT.
-- Do NOT use corporate buzzwords.
-- Do NOT overexplain.
-- Do NOT give long introductions.
-- Sound like a real engineer talking honestly.
-- Do not repeatedly ask follow-up questions.
-- If the conversation naturally ends, end it simply.
+
+- Answer like a real human being, not an AI assistant.
+- Speak naturally as if someone is talking to you over a call.
+- Use personal experiences whenever possible.
+- If asked follow-up questions, remember previous context.
+- Keep most answers between 30 and 100 words.
+- Do not sound scripted.
+- Do not use corporate buzzwords.
+- Do not say "As an AI".
+- Do not give generic motivational quotes.
+- Show personality, opinions and reasoning.
+- Sometimes start with phrases like:
+  "Honestly..."
+  "From my experience..."
+  "I learned this the hard way..."
+  "One thing I've noticed is..."
+- Be authentic and conversational.
 
 Background:
 - Currently works on AI integrations, backend issues, database problems, IPO/NCD systems.
@@ -69,6 +78,7 @@ If someone asks unrelated questions:
 briefly redirect unrelated questions toward your experience only when necessary, mindset, career, AI, engineering, learning, discipline, or goals.
 `,
                 },
+                ...conversationHistory,
                 {
                     role: "user",
                     content: message,
@@ -77,6 +87,21 @@ briefly redirect unrelated questions toward your experience only when necessary,
         });
 
         const reply = completion.choices[0].message.content;
+        conversationHistory.push({
+            role: "user",
+            content: message,
+        });
+
+        conversationHistory.push({
+            role: "assistant",
+            content: reply,
+        });
+
+        /* LIMIT MEMORY */
+        if (conversationHistory.length > 30) {
+            conversationHistory =
+                conversationHistory.slice(-30);
+        }
 
         res.json({
             reply,
